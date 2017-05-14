@@ -9,7 +9,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.new(user_params)
     @user.generate_authentication_token!
     if @user.save
-      list = List.new(title: 'General', user_id: user.id)
+      list = List.new(title: 'General', user_id: @user.id)
       if list.save
         render :template =>'/api/v1/users/create.json.jbuilder', :status => 201, :formats => [:json]
       else
