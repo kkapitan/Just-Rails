@@ -1,3 +1,3 @@
-@lists.each do |list|
+@lists.map do |list|
   json.partial! '/api/v1/shared/list_basic', list: list
 end
