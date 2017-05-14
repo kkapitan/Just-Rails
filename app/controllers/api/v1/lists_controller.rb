@@ -4,25 +4,27 @@ class Api::V1::ListsController < ApplicationController
   before_action :authenticate_with_token!
 
   def show
-    respond_with List.find(by: params[:id])
+    @list = List.find(params[:id])
+    render :template =>'/api/v1/lists/show.json.jbuilder', :status => 200, :formats => [:json]
   end
 
   def index
-    lists = List.all.where(user_id: @current_user.id)
-    respond_with lists
+    @lists = @current_user.lists
+    render :template =>'/api/v1/lists/index.json.jbuilder', :status => 200, :formats => [:json]
   end
 
   def create
-    list = List.new(list_params)
-    if list.save
-      render json: list, status: 201, location: [:api, list]
+    @list = List.new(list_params)
+    @list.user_id = @current_user.id
+    if @list.save
+      render :template =>'/api/v1/lists/create.json.jbuilder', :status => 201, :formats => [:json]
     else
       render json: { errors: list.errors }, status: 422
     end
   end
 
   def list_params
-    params.require(:list).permit(:title, :user_id)
+    params.permit(:title)
   end
 
 end

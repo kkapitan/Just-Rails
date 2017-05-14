@@ -4,22 +4,23 @@ class Api::V1::TasksController < ApplicationController
   before_action :authenticate_with_token!
 
   def show
-    respond_with Task.find_by(id: params[:id])
+    @task = Task.find_by(id: params[:id])
+    render :template =>'/api/v1/tasks/show.json.jbuilder', :status => 200, :formats => [:json]
   end
 
   def create
-    task = Task.new(task_params)
-    if task.save
-      render json: task, status: 201, location: [:api, task]
+    @task = Task.new(task_params)
+    if @task.save
+      render :template =>'/api/v1/tasks/create.json.jbuilder', :status => 200, :formats => [:json]
     else
       render json: { errors: task.errors }, status: 422
     end
   end
 
   def update
-    task = Task.find_by(id: params[:id])
-    if task.update(task_params)
-      render json: task, status: 201, location: [:api, task]
+    @task = Task.find_by(id: params[:id])
+    if @task.update(task_params)
+      render :template =>'/api/v1/tasks/update.json.jbuilder', :status => 200, :formats => [:json]
     else
       render json: { errors: task.errors }, status: 422
     end
@@ -32,7 +33,7 @@ class Api::V1::TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :priority, :description, :list_id)
+    params.permit(:title, :priority, :description, :list_id, :deadline, :done)
   end
 
 end
