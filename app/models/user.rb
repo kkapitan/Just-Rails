@@ -4,12 +4,13 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  validates :auth_token, uniqueness: true
-  validates :username, presence: true
-
   before_create :generate_authentication_token!
+  validates :auth_token, uniqueness: true
+
+  has_many :lists, dependent: :destroy
 
   def generate_authentication_token!
+    print("Hey")
     begin
       self.auth_token = Devise.friendly_token
     end while self.class.exists?(auth_token: auth_token)
