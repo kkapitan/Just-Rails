@@ -16,7 +16,7 @@ class Api::V1::UsersController < ApplicationController
         render json: { errors: list.errors }, status: 422
       end
     else
-      render json: { errors: user.errors }, status: 422
+      render json: { errors: @user.errors }, status: 422
     end
   end
 
