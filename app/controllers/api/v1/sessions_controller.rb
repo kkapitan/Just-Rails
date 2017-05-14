@@ -1,6 +1,12 @@
 class Api::V1::SessionsController < ApplicationController
   respond_to :json
 
+  before_action :authenticate_with_token!, only: [:show, :destroy]
+
+  def show
+    respond_with @current_user
+  end
+
   def create
     user_password = params[:session][:password]
     user_email = params[:session][:email]
@@ -17,7 +23,6 @@ class Api::V1::SessionsController < ApplicationController
   end
 
   def destroy
-
     @current_user.generate_authentication_token!
     @current_user.save
     head 204
