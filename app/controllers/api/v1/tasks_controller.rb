@@ -13,7 +13,8 @@ class Api::V1::TasksController < ApplicationController
     if @task.save
       render :template =>'/api/v1/tasks/create.json.jbuilder', :status => 200, :formats => [:json]
     else
-      render json: { errors: task.errors }, status: 422
+      print(@task.errors)
+      render json: { errors: @task.errors }, status: 422
     end
   end
 
@@ -22,7 +23,8 @@ class Api::V1::TasksController < ApplicationController
     if @task.update(task_params)
       render :template =>'/api/v1/tasks/update.json.jbuilder', :status => 200, :formats => [:json]
     else
-      render json: { errors: task.errors }, status: 422
+      print(@task.errors)
+      render json: { errors: @task.errors }, status: 422
     end
   end
 
