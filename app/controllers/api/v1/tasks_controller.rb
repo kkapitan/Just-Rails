@@ -35,6 +35,12 @@ class Api::V1::TasksController < ApplicationController
   end
 
   def task_params
+    require 'date'
+
+    if params.has_key? :deadline
+       params[:deadline] = Time.at(params[:deadline]).to_datetime
+    end
+
     params.permit(:title, :priority, :description, :list_id, :deadline, :done)
   end
 
